@@ -55,7 +55,7 @@ class GlobalKeyLogger : ApplicationContext
         logFileName = $"keylog_{timestamp}.csv";
 
         writer = new StreamWriter(logFileName, false); // overwrite mode (false)
-        writer.WriteLine("vk_code_decimal,hold_time_ms,flight_time_ms");
+        writer.WriteLine("VK,HT,FT");
         writer.Flush();
     }
 
@@ -68,7 +68,7 @@ class GlobalKeyLogger : ApplicationContext
     {
         isRecording = !isRecording;
         trayIcon.Icon = isRecording ? recordIcon : pauseIcon;
-        trayIcon.ContextMenuStrip.Items[0].Text = isRecording ? "Pause" : "Play";
+        trayIcon.ContextMenuStrip.Items[0].Text = isRecording ? "Pause" : "Resume";
     }
 
     private void Exit(object sender, EventArgs e)
