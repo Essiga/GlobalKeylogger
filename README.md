@@ -7,7 +7,7 @@ The tool was designed to generate data in the same format as the following datas
 ## Usage/Installation
 
 No installation required, just download the executable and run it.\
-If you have .NET 8.0 installed you can use the ['/framework_dependent/GlobalKeyLogger.exe'](framework_dependent/GlobalKeyLogger.exe) if not you can use the ['/self_contained/GlobalKeyLogger.exe'](self_contained/GlobalKeyLogger.zip) version which is zipped due to file size limitations of github, it however is a self-contained executable that brings everything that you need to run it.
+If you have .NET 8.0 installed you can use the ['/framework_dependent/GlobalKeyLogger.exe'](framework_dependent/GlobalKeyLogger.exe) if not you can use the ['/self_contained/GlobalKeyLogger.zip'](self_contained/GlobalKeyLogger.zip) version which is zipped due to file size limitations of github, it however is a self-contained executable that brings everything that you need to run it.
 If you are unsure, just use the self-contained version, the file size is larger but it contains everything you need.
 
 When running the program, it will minimize to the tray and immediately start logging keystrokes.
