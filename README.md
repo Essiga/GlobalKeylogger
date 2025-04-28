@@ -30,3 +30,5 @@ The file contains VK,HT, and FT which stands for VirtualKeycode, HoldTime, and F
 - FlightTime: The time in milliseconds between the last key press and the current key press
 
 Each new run of the program will create a new file with a new timestamp. Pausing and resuming will not create a new file, but will continue to log to the same file.
+If datasets are collected by the same user on different PCs with different keyboards or keyboard layouts, please keep the datasets separate, as it may cause issues during training.
+
