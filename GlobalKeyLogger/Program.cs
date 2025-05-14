@@ -20,6 +20,7 @@ class GlobalKeyLogger : ApplicationContext
     private static Icon recordIcon;
     private static Icon pauseIcon;
     private static string logFileName;
+    private static int keystrokeCount = 0; // 🆕 Track number of logged keystrokes
 
     private static LowLevelKeyboardProc _proc = HookCallback;
 
@@ -34,7 +35,7 @@ class GlobalKeyLogger : ApplicationContext
         {
             Icon = recordIcon,
             Visible = true,
-            Text = "Global Keylogger"
+            Text = "Global Keylogger (0)" // Initial tooltip
         };
 
         // Create context menu
@@ -54,14 +55,14 @@ class GlobalKeyLogger : ApplicationContext
         string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
         logFileName = $"keylog_{timestamp}.csv";
 
-        writer = new StreamWriter(logFileName, false); // overwrite mode (false)
+        writer = new StreamWriter(logFileName, false);
         writer.WriteLine("VK,HT,FT");
         writer.Flush();
     }
 
     private void TrayIcon_DoubleClick(object sender, EventArgs e)
     {
-        MessageBox.Show($"Keylogger is {(isRecording ? "recording" : "paused")}.\nLogging to:\n{logFileName}\n\nRight-click tray icon for options.", "Global Keylogger");
+        MessageBox.Show($"Keylogger is {(isRecording ? "recording" : "paused")}.\nLogged {keystrokeCount} keystrokes.\n\nLogging to:\n{logFileName}\n\nRight-click tray icon for options.", "Global Keylogger");
     }
 
     private void PauseLogging(object sender, EventArgs e)
@@ -69,6 +70,7 @@ class GlobalKeyLogger : ApplicationContext
         isRecording = !isRecording;
         trayIcon.Icon = isRecording ? recordIcon : pauseIcon;
         trayIcon.ContextMenuStrip.Items[0].Text = isRecording ? "Pause" : "Resume";
+        UpdateTooltip(); // 🆕 Update tooltip on pause/resume
     }
 
     private void Exit(object sender, EventArgs e)
@@ -89,11 +91,9 @@ class GlobalKeyLogger : ApplicationContext
         }
     }
 
-    private delegate IntPtr LowLevelKeyboardProc(
-        int nCode, IntPtr wParam, IntPtr lParam);
+    private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
-    private static IntPtr HookCallback(
-        int nCode, IntPtr wParam, IntPtr lParam)
+    private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
     {
         if (nCode >= 0)
         {
@@ -130,12 +130,22 @@ class GlobalKeyLogger : ApplicationContext
                         writer.WriteLine($"{vkCode},{holdTime},{flightTime}");
                         writer.Flush();
 
+                        keystrokeCount++; // 🆕 Count each logged key
+                        UpdateTooltip();  // 🆕 Update tray text
+
                         keyDownTimes.Remove(vkCode);
                     }
                 }
             }
         }
         return CallNextHookEx(_hookID, nCode, wParam, lParam);
+    }
+
+    private static void UpdateTooltip()
+    {
+        string state = isRecording ? "Recording" : "Paused";
+        string tooltip = $"Keylogger ({state})\nKeys: {keystrokeCount}";
+        trayIcon.Text = tooltip.Length > 63 ? tooltip.Substring(0, 63) : tooltip;
     }
 
     private static Icon CreateRedDotIcon()

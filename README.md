@@ -20,6 +20,9 @@ The red dot indicates that it is currently recording and can be paused via right
 ![img_2.png](img_2.png)\
 The blue pause button indicates that it is currently paused and can be resumed via right click and 'Resume'
 
+The program will only run once logged into the user account, it will not run on the lock screen.\
+When hovering over the tray icon it will show the amount of keystrokes logged in the current session.
+
 ## Logging
 
 A .csv file is created next to the executable with the name keylog_<timestamp>.csv
